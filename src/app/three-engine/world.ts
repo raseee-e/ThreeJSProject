@@ -77,7 +77,6 @@ export class World {
   }
 
   private animate = () => {
-    requestAnimationFrame(this.animate);
     const time = this.clock.getElapsedTime();
 
     // Animation an das Trophy-Modul delegieren
@@ -85,5 +84,8 @@ export class World {
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+    
+    // Schedule the next frame AFTER rendering
+    requestAnimationFrame(this.animate);
   }
 }

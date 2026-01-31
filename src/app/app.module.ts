@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { IonicModule } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// Import Global Styles (CSS imports moved to styles.css)
+// Import Global Styles
 import '../styles.css';
 
 @NgModule({
@@ -15,7 +15,7 @@ import '../styles.css';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
+    NoopAnimationsModule,
     IonicModule.forRoot(),
     AppRoutingModule
   ],

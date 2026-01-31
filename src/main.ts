@@ -10,5 +10,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
 platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+  .bootstrapModule(AppModule, { ngZone: 'zone.js' })
+  .catch(err => {
+    console.error('Bootstrap Error:', err);
+    throw err;
+  });

@@ -1,22 +1,36 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { World } from '../../three-engine/world'; // Pfad zur neuen World Datei
+import { World } from '../../three-engine/world';
 
 @Component({
   selector: 'app-stage-canvas',
-  templateUrl: './stage-canvas.component.html',
-  styleUrls: ['./stage-canvas.component.css']
+  template: `<div #sceneContainer style="width: 100%; height: 100%; display: block; background: #000;"></div>`,
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  `]
 })
 export class StageCanvasComponent implements AfterViewInit {
-  // Wir suchen nach einem Element mit #sceneContainer im HTML
   @ViewChild('sceneContainer') containerRef?: ElementRef<HTMLDivElement>;
   
   private world?: World;
 
   ngAfterViewInit() {
-    if (this.containerRef?.nativeElement) {
-      // Wir übergeben das Div an die World-Klasse
-      this.world = new World(this.containerRef.nativeElement);
-    }
+    // Use setTimeout to ensure DOM is fully rendered before initializing Three.js
+    setTimeout(() => {
+      if (this.containerRef?.nativeElement) {
+        try {
+          console.log('Initializing Three.js World...');
+          this.world = new World(this.containerRef.nativeElement);
+          console.log('Three.js World initialized successfully');
+        } catch (error) {
+          console.error('Error initializing World:', error);
+        }
+      }
+    }, 100);
   }
 
   getWorld() {
