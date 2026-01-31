@@ -4,8 +4,19 @@
 
 import * as THREE from 'three';
 
-export function createLights(scene) {
-    const lights = {
+export interface Lights {
+    main: THREE.DirectionalLight;
+    spotlight1: THREE.SpotLight;
+    spotlight2: THREE.SpotLight;
+    spotlight3: THREE.SpotLight;
+    spotlight4: THREE.SpotLight;
+    spotlight5: THREE.SpotLight;
+    ambient: THREE.AmbientLight;
+    [key: string]: THREE.Light;
+}
+
+export function createLights(scene: THREE.Scene): Lights {
+    const lights: Lights = {
         main: new THREE.DirectionalLight(0xffffff, 1),
         spotlight1: new THREE.SpotLight(0xff0000, 2),
         spotlight2: new THREE.SpotLight(0x00ff00, 2),

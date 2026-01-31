@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { BuyldingStageScene } from '../../../js/scene/main.js';
+import { BodybuildingStageScene } from "../../../ts/scene/main";
 
 @Component({
   selector: 'app-stage-canvas',
@@ -8,12 +8,12 @@ import { BuyldingStageScene } from '../../../js/scene/main.js';
 })
 export class StageCanvasComponent implements AfterViewInit {
   @ViewChild('canvasElement') canvasElement?: ElementRef<HTMLCanvasElement>;
-  private scene?: BuyldingStageScene;
+  private scene?: BodybuildingStageScene;
 
   ngAfterViewInit() {
     if (this.canvasElement?.nativeElement) {
       const canvas = this.canvasElement.nativeElement;
-      this.scene = new BuyldingStageScene(canvas);
+      this.scene = new BodybuildingStageScene(canvas);
     }
   }
 

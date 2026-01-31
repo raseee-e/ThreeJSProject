@@ -1,10 +1,31 @@
+/// <reference path="../../types/dat.gui.d.ts" />
 /**
  * Dat.GUI Setup
  */
 
 import * as THREE from 'three';
+import * as dat from 'dat.gui';
+import type { Lights } from './lights';
+import type { Materials } from './materials';
 
-export function setupGUI(gui, lights, materials, controls, meshes) {
+export interface AnimationState {
+    sphereSpeed: number;
+    torusSpeed: number;
+}
+
+export interface MeshesData {
+    camera: THREE.PerspectiveCamera;
+    scene: THREE.Scene;
+    [key: string]: any;
+}
+
+export function setupGUI(
+    gui: dat.GUI,
+    lights: Lights,
+    materials: Materials,
+    controls: any,
+    meshes: MeshesData
+): AnimationState {
     // Lichter
     const lightFolder = gui.addFolder('💡 Lichtquellen');
     lightFolder.add(lights.main, 'intensity', 0, 2).name('Main Light');
@@ -23,7 +44,7 @@ export function setupGUI(gui, lights, materials, controls, meshes) {
 
     // Animationen
     const animationFolder = gui.addFolder('⚙️ Animationen');
-    const animState = { sphereSpeed: 0.02, torusSpeed: 0.03 };
+    const animState: AnimationState = { sphereSpeed: 0.02, torusSpeed: 0.03 };
     animationFolder.add(animState, 'sphereSpeed', 0, 0.1).name('Sphere Rotation Speed');
     animationFolder.add(animState, 'torusSpeed', 0, 0.1).name('Torus Rotation Speed');
     animationFolder.add(controls, 'autoRotate').name('Auto Rotate Camera');
@@ -40,7 +61,9 @@ export function setupGUI(gui, lights, materials, controls, meshes) {
     // Szene
     const sceneFolder = gui.addFolder('🌍 Szene');
     sceneFolder.addColor(meshes.scene, 'background').name('Background Color');
-    sceneFolder.add(meshes.scene.fog, 'far', 1, 500).name('Fog Distance');
+    if (meshes.scene.fog) {
+        sceneFolder.add(meshes.scene.fog, 'far', 1, 500).name('Fog Distance');
+    }
     sceneFolder.open();
 
     return animState;

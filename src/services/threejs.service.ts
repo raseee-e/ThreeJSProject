@@ -3,7 +3,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { BodybuildingStageScene } from '../js/scene/main.js';
+import { BodybuildingStageScene } from '../ts/scene/main.js';
 
 @Injectable({
   providedIn: 'root'

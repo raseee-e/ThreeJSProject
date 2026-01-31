@@ -4,11 +4,13 @@
 
 import * as THREE from 'three';
 
-export function generateHeightMap(width = 512, height = 512) {
+export function generateHeightMap(width: number = 512, height: number = 512): THREE.CanvasTexture {
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
+
+    if (!ctx) throw new Error('Could not get canvas context');
 
     const imageData = ctx.createImageData(width, height);
     const data = imageData.data;
@@ -42,11 +44,13 @@ export function generateHeightMap(width = 512, height = 512) {
     return new THREE.CanvasTexture(canvas);
 }
 
-export function generateNormalMap(size = 512) {
+export function generateNormalMap(size: number = 512): THREE.CanvasTexture {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext('2d');
+
+    if (!ctx) throw new Error('Could not get canvas context');
 
     const imageData = ctx.createImageData(size, size);
     const data = imageData.data;

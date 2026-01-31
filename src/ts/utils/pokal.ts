@@ -1,10 +1,13 @@
+/// <reference path="../../types/dat.gui.d.ts" />
 /**
  * Pokal aus Blender laden oder Fallback
  */
 
+import * as THREE from 'three';
+import * as dat from 'dat.gui';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export function setupPokal(stage, gui) {
+export function setupPokal(stage: THREE.Group, gui: dat.GUI): void {
     const gltfLoader = new GLTFLoader();
 
     gltfLoader.load('public/models/trophy.glb', (gltf) => {
@@ -13,8 +16,8 @@ export function setupPokal(stage, gui) {
         trophy.position.set(0, 1.5, 0);
         trophy.rotation.y = Math.PI / 4;
 
-        trophy.traverse((child) => {
-            if (child instanceof window.THREE.Mesh) {
+        trophy.traverse((child: THREE.Object3D) => {
+            if (child instanceof THREE.Mesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
@@ -27,16 +30,14 @@ export function setupPokal(stage, gui) {
         trophyFolder.add(trophy.rotation, 'y', 0, Math.PI * 2, 0.01).name('Rotation');
         trophyFolder.add(trophy.scale, 'x', 0.1, 5, 0.1).name('Skalierung');
         trophyFolder.open();
-
-        console.log('✓ Pokal aus Blender geladen!');
     }, undefined, (error) => {
-        console.log('ℹ Fallback Trophy erstellt (Blender-Modell nicht gefunden)');
+        console.warn('Trophy model not found, using fallback:', error);
         createFallbackTrophy(stage, gui);
     });
 }
 
-function createFallbackTrophy(stage, gui) {
-    const THREE = window.THREE;
+function createFallbackTrophy(stage: THREE.Group, gui: dat.GUI): void {
+    const THREE_MODULE = window.THREE || THREE;
     
     const materials = {
         gold: new THREE.MeshStandardMaterial({ 

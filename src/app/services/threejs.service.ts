@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-// @ts-ignore
-import { BodybuildingStageScene } from '../../js/scene/main.js';
+import { BodybuildingStageScene } from '../../ts/scene/main';
 
 @Injectable({
   providedIn: 'root'

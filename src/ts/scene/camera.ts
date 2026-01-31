@@ -4,7 +4,7 @@
 
 import * as THREE from 'three';
 
-export function setupCamera(width, height) {
+export function setupCamera(width: number, height: number): THREE.PerspectiveCamera {
     const camera = new THREE.PerspectiveCamera(
         75,
         width / height,
@@ -15,7 +15,7 @@ export function setupCamera(width, height) {
     return camera;
 }
 
-export function updateCameraAspect(camera, width, height) {
+export function updateCameraAspect(camera: THREE.PerspectiveCamera, width: number, height: number): void {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
 }

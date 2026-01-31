@@ -4,7 +4,18 @@
 
 import * as THREE from 'three';
 
-export function createMaterials() {
+export interface Materials {
+    stage: THREE.MeshStandardMaterial;
+    wood: THREE.MeshStandardMaterial;
+    metalGold: THREE.MeshStandardMaterial;
+    metalSilver: THREE.MeshStandardMaterial;
+    crystal: THREE.MeshStandardMaterial;
+    red: THREE.MeshStandardMaterial;
+    black: THREE.MeshStandardMaterial;
+    [key: string]: THREE.MeshStandardMaterial;
+}
+
+export function createMaterials(): Materials {
     return {
         stage: new THREE.MeshStandardMaterial({
             color: 0x2a2a2a,
