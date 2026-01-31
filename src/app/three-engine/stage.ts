@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createNoiseTexture } from './textureUtils';
+import { createLogoTexture, createLogoCanvasTexture } from './logoLoader';
 
 export class Stage {
   mesh: THREE.Group;
@@ -161,10 +162,10 @@ export class Stage {
     ring.rotation.x = 0;
     this.mesh.add(ring);
 
-    // Logo texture (loads the Romania Muscle Fest logo)
+    // load picture texture
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
-      'textures/logo.png',
+      'textures/images.jpg',
       (texture) => {
         // Create canvas to display logo
         const logoMat = new THREE.MeshStandardMaterial({
@@ -180,11 +181,11 @@ export class Stage {
         logoMesh.scale.set(0.95, 0.95, 1);
         this.mesh.add(logoMesh);
         
-        console.log('✅ Logo texture loaded successfully');
+        console.log('✅ Romania Muscle Fest logo loaded successfully');
       },
       undefined,
       (error) => {
-        console.warn('⚠️ Logo not found at textures/logo.png. Using placeholder instead.');
+        console.warn('⚠️ Logo not found at textures/images.jpg. Using placeholder instead.', error);
         // Use placeholder if logo not found
         const placeholderMat = new THREE.MeshBasicMaterial({
           color: 0xffdd00

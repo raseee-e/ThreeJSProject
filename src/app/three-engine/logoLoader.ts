@@ -1,8 +1,5 @@
 import * as THREE from 'three';
 
-/**
- * Loads the Romania Muscle Fest logo and applies it to a texture
- */
 export async function createLogoTexture(imagePath: string): Promise<THREE.Texture> {
   return new Promise((resolve, reject) => {
     const textureLoader = new THREE.TextureLoader();
