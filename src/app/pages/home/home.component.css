@@ -1,0 +1,27 @@
+ion-content {
+  --background: #1a1a1a;
+}
+
+.info-card {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 100;
+}
+
+.info-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-card li {
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+}
+
+.info-card li:last-child {
+  border-bottom: none;
+}

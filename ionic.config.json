@@ -1,0 +1,11 @@
+{
+  "name": "bodybuilding-stage",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "projects": {},
+  "cli": {
+    "defaultCollection": "@ionic/angular-toolkit"
+  }
+}

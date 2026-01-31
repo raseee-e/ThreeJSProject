@@ -1,0 +1,87 @@
+/**
+ * Global Styles
+ */
+
+/* Import Ionic CSS */
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
+@import '@ionic/angular/css/display.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #000;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ionic Overrides */
+ion-content {
+  --background: #1a1a1a;
+  --color: #ffffff;
+}
+
+ion-header {
+  --background: #1f1f1f;
+  --border-color: #444;
+}
+
+ion-toolbar {
+  --background: #1f1f1f;
+  --color: #ffd700;
+}
+
+/* Dat.GUI Styling */
+.dg {
+  font-family: Arial, sans-serif;
+  z-index: 101 !important;
+}
+
+.dg.ac {
+  z-index: 101 !important;
+}
+
+.dg li:not(.folder) {
+  height: 27px;
+  line-height: 27px;
+  border-bottom: 1px solid #4c4c4c;
+}
+
+.dg li.folder {
+  border-left: 9px solid transparent;
+}
+
+#gui-container {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 101 !important;
+}

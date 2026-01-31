@@ -1,0 +1,30 @@
+<ion-page>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>🏋️ Bodybuilding Bühne</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content [fullscreen]="true" class="ion-padding">
+    <app-stage-canvas></app-stage-canvas>
+    
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="toggleInfo()">
+        <ion-icon [icon]="informationCircle"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-card *ngIf="showInfo" class="info-card">
+      <ion-card-header>
+        <ion-card-title>Steuerung</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li><strong>Maus:</strong> Szene drehen</li>
+          <li><strong>Scroll:</strong> Zoomen</li>
+          <li><strong>W/A/S/D:</strong> Kamera bewegen</li>
+          <li><strong>Dat.GUI:</strong> Live Einstellungen</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</ion-page>
