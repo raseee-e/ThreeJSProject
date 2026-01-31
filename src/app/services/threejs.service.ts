@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
-import { BodybuildingStageScene } from '../../ts/scene/main';
+import { World } from '../three-engine/world';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThreeJsService {
-  private scene?: BodybuildingStageScene;
+  private world?: World;
 
   constructor() {}
 
-  initScene(canvas: HTMLCanvasElement): BodybuildingStageScene {
-    this.scene = new BodybuildingStageScene(canvas);
-    return this.scene;
+  // Wir erwarten jetzt ein Container-Div (HTMLElement), keinen Canvas direkt
+  initScene(container: HTMLElement): World {
+    this.world = new World(container);
+    return this.world;
   }
 
-  getScene(): BodybuildingStageScene | undefined {
-    return this.scene;
+  getScene(): World | undefined {
+    return this.world;
   }
 
-  toggleAnimation(): void {
-    if (this.scene?.controls) {
-      this.scene.controls.autoRotate = !this.scene.controls.autoRotate;
-    }
+  // Optional: Aufräumen (Memory Leak Prevention)
+  dispose() {
+    // Hier könntest du später Logik einbauen, um den Renderer zu stoppen
+    this.world = undefined;
   }
 }

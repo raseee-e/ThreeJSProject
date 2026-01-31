@@ -1,22 +1,23 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, NgZone } from '@angular/core';
-import { World } from '../../three-engine/world'; // Hier importieren wir unsere neue Klasse
+import { Component } from '@angular/core';
+import { informationCircle } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomePage implements AfterViewInit {
-  @ViewChild('sceneContainer') sceneContainer!: ElementRef;
-  
-  private world!: World;
+export class HomePage {
+  // Variable für das HTML verfügbar machen
+  informationCircle = informationCircle;
+  showInfo = false;
 
-  constructor(private ngZone: NgZone) {}
+  constructor() {
+    // Icon registrieren
+    addIcons({ informationCircle });
+  }
 
-  ngAfterViewInit() {
-    // Sobald die Seite geladen ist, starten wir Three.js
-    if (this.sceneContainer) {
-      this.world = new World(this.sceneContainer.nativeElement, this.ngZone);
-    }
+  toggleInfo() {
+    this.showInfo = !this.showInfo;
   }
 }

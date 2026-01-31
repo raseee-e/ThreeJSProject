@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { BodybuildingStageScene } from "../../../ts/scene/main";
+import { World } from '../../three-engine/world'; // Pfad zur neuen World Datei
 
 @Component({
   selector: 'app-stage-canvas',
@@ -7,17 +7,19 @@ import { BodybuildingStageScene } from "../../../ts/scene/main";
   styleUrls: ['./stage-canvas.component.css']
 })
 export class StageCanvasComponent implements AfterViewInit {
-  @ViewChild('canvasElement') canvasElement?: ElementRef<HTMLCanvasElement>;
-  private scene?: BodybuildingStageScene;
+  // Wir suchen nach einem Element mit #sceneContainer im HTML
+  @ViewChild('sceneContainer') containerRef?: ElementRef<HTMLDivElement>;
+  
+  private world?: World;
 
   ngAfterViewInit() {
-    if (this.canvasElement?.nativeElement) {
-      const canvas = this.canvasElement.nativeElement;
-      this.scene = new BodybuildingStageScene(canvas);
+    if (this.containerRef?.nativeElement) {
+      // Wir übergeben das Div an die World-Klasse
+      this.world = new World(this.containerRef.nativeElement);
     }
   }
 
-  getScene() {
-    return this.scene;
+  getWorld() {
+    return this.world;
   }
 }
