@@ -7,36 +7,73 @@ export class Lighting {
   constructor(target: THREE.Object3D) {
     this.group = new THREE.Group();
 
-    // 1. Ambient
-    const ambient = new THREE.AmbientLight(0xffffff, 0.1);
+    // Reduce ambient - we want dramatic lighting
+    const ambient = new THREE.AmbientLight(0xffffff, 0.2);
     this.group.add(ambient);
 
-    // 2. Haupt-Spot
-    this.spotLight = new THREE.SpotLight(0xffaa00, 50);
-    this.spotLight.position.set(5, 10, 5);
-    this.spotLight.angle = 0.5;
-    this.spotLight.penumbra = 0.5;
+    // Main stage spotlight (warm)
+    this.spotLight = new THREE.SpotLight(0xffaa00, 120);
+    this.spotLight.position.set(5, 14, 6);
+    this.spotLight.angle = 0.6;
+    this.spotLight.penumbra = 0.7;
+    this.spotLight.decay = 2;
     this.spotLight.castShadow = true;
-    this.spotLight.target = target; // Zielt auf den Pokal
+    this.spotLight.shadow.mapSize.width = 4096;
+    this.spotLight.shadow.mapSize.height = 4096;
+    this.spotLight.target = target;
     this.group.add(this.spotLight);
 
-    // 3. Dekorative bunte Lichter
-    this.createDecorativeLights();
+    // Rim light from behind (cool)
+    const rimLight = new THREE.SpotLight(0x00ccff, 100);
+    rimLight.position.set(-8, 12, -10);
+    rimLight.angle = 0.7;
+    rimLight.penumbra = 0.5;
+    rimLight.castShadow = true;
+    rimLight.target.position.set(0, 2, 0);
+    this.group.add(rimLight);
+    this.group.add(rimLight.target);
+
+    // Stage fill lights (left and right)
+    this.createFillLights();
   }
 
-  private createDecorativeLights() {
-    const positions = [[-8, -8], [8, -8], [-8, -4], [8, -4]];
-    const colors = [0xff0000, 0x0000ff, 0x00ff00, 0xff00ff];
-    const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  private createFillLights() {
+    // Left fill (magenta)
+    const leftFill = new THREE.SpotLight(0xff0080, 90);
+    leftFill.position.set(-20, 13, 5);
+    leftFill.angle = 0.8;
+    leftFill.penumbra = 0.6;
+    leftFill.castShadow = true;
+    leftFill.target.position.set(0, 2, 0);
+    this.group.add(leftFill);
+    this.group.add(leftFill.target);
 
-    positions.forEach((pos, i) => {
-        const light = new THREE.PointLight(colors[i], 10, 15);
-        light.position.set(pos[0], 7.5, pos[1]);
-        
-        const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.3), bulbMat);
-        bulb.position.copy(light.position);
-        
-        this.group.add(light, bulb);
-    });
+    // Right fill (cyan)
+    const rightFill = new THREE.SpotLight(0x00ffff, 90);
+    rightFill.position.set(20, 13, 5);
+    rightFill.angle = 0.8;
+    rightFill.penumbra = 0.6;
+    rightFill.castShadow = true;
+    rightFill.target.position.set(0, 2, 0);
+    this.group.add(rightFill);
+    this.group.add(rightFill.target);
+
+    // Backdrop accent lights
+    const backLeft = new THREE.PointLight(0xff0080, 50, 40);
+    backLeft.position.set(-15, 10, -15);
+    this.group.add(backLeft);
+
+    const backRight = new THREE.PointLight(0x0080ff, 50, 40);
+    backRight.position.set(15, 10, -15);
+    this.group.add(backRight);
+
+    // Decorative uplights
+    const upLight1 = new THREE.PointLight(0x00ff80, 40, 30);
+    upLight1.position.set(-25, 2, 0);
+    this.group.add(upLight1);
+
+    const upLight2 = new THREE.PointLight(0xffff00, 40, 30);
+    upLight2.position.set(25, 2, 0);
+    this.group.add(upLight2);
   }
 }

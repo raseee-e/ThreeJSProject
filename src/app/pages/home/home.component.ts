@@ -7,7 +7,7 @@ import { addIcons } from 'ionicons';
   template: `
     <ion-header>
       <ion-toolbar color="dark">
-        <ion-title>Mr. Olympia Stage</ion-title>
+        <ion-title>Bodybuilding-Stage</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="toggleInfo()">
             <ion-icon [icon]="informationCircle" slot="icon-only"></ion-icon>
