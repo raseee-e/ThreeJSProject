@@ -128,8 +128,8 @@ export class Stage {
   }
 
   private addLogoArea() {
-    // Central glowing circle for logo area (like Romania Muscle Fest)
-    const logoRadius = 5;
+    // Central glowing circle for logo area (Romania Muscle Fest)
+    const logoRadius = 5.5;
     
     // Background circle (dark)
     const circleGeo = new THREE.CircleGeometry(logoRadius, 64);
@@ -147,7 +147,7 @@ export class Stage {
     this.mesh.add(logoBackground);
 
     // Glowing ring around logo
-    const ringGeo = new THREE.TorusGeometry(logoRadius, 0.4, 32, 100);
+    const ringGeo = new THREE.TorusGeometry(logoRadius, 0.5, 32, 100);
     const ringMat = new THREE.MeshStandardMaterial({
       color: 0x00d4ff,
       metalness: 0.9,
@@ -161,12 +161,47 @@ export class Stage {
     ring.rotation.x = 0;
     this.mesh.add(ring);
 
+    // Logo texture (loads the Romania Muscle Fest logo)
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+      'textures/logo.png',
+      (texture) => {
+        // Create canvas to display logo
+        const logoMat = new THREE.MeshStandardMaterial({
+          map: texture,
+          emissive: 0xffffff,
+          emissiveIntensity: 0.3,
+          metalness: 0.2,
+          roughness: 0.5
+        });
+        
+        const logoMesh = new THREE.Mesh(circleGeo, logoMat);
+        logoMesh.position.set(0, 8, -9.65);
+        logoMesh.scale.set(0.95, 0.95, 1);
+        this.mesh.add(logoMesh);
+        
+        console.log('✅ Logo texture loaded successfully');
+      },
+      undefined,
+      (error) => {
+        console.warn('⚠️ Logo not found at textures/logo.png. Using placeholder instead.');
+        // Use placeholder if logo not found
+        const placeholderMat = new THREE.MeshBasicMaterial({
+          color: 0xffdd00
+        });
+        const placeholder = new THREE.Mesh(circleGeo, placeholderMat);
+        placeholder.position.set(0, 8, -9.65);
+        placeholder.scale.set(0.95, 0.95, 1);
+        this.mesh.add(placeholder);
+      }
+    );
+
     // Inner glow
-    const innerGlowGeo = new THREE.CircleGeometry(logoRadius - 0.5, 64);
+    const innerGlowGeo = new THREE.CircleGeometry(logoRadius - 0.7, 64);
     const innerGlowMat = new THREE.MeshBasicMaterial({
       color: 0x0066ff,
       transparent: true,
-      opacity: 0.3
+      opacity: 0.2
     });
     
     const innerGlow = new THREE.Mesh(innerGlowGeo, innerGlowMat);
@@ -174,8 +209,8 @@ export class Stage {
     this.mesh.add(innerGlow);
 
     // Point light for logo glow
-    const logoLight = new THREE.PointLight(0x0099ff, 60, 20);
-    logoLight.position.set(0, 8, -5);
+    const logoLight = new THREE.PointLight(0x0099ff, 80, 25);
+    logoLight.position.set(0, 8, -3);
     this.mesh.add(logoLight);
   }
 

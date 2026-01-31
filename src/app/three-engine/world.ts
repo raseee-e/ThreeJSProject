@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as dat from 'dat.gui';
 
 import { Stage } from './stage';
 import { Trophy } from './trophy';
 import { Lighting } from './lighting';
+import { Jury } from './jury';
 
 export class World {
   private scene: THREE.Scene;
@@ -61,6 +63,9 @@ export class World {
     this.trophy = new Trophy(); // Placeholder for lighting reference only
     // this.scene.add(this.trophy.mesh); // Hidden for now - to be replaced with Blender model
 
+    // Add jury seating - load from Blender model
+    this.loadJuryModel();
+
     // Enhanced Lighting
     this.lighting = new Lighting(this.trophy.mesh);
     this.scene.add(this.lighting.group);
@@ -81,6 +86,40 @@ export class World {
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(nw, nh);
     });
+  }
+
+  private loadJuryModel() {
+    const loader = new GLTFLoader();
+    loader.load(
+      'models/jury.glb',
+      (gltf) => {
+        const juryMesh = gltf.scene;
+        // Position the jury model
+        juryMesh.position.set(0, 0, 12);
+        juryMesh.scale.set(1, 1, 1);
+        
+        // Rotate to match Three.js axes (Y axis rotation)
+        juryMesh.rotation.y = Math.PI;
+        
+        // Enable shadows for all meshes in the model
+        juryMesh.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        
+        this.scene.add(juryMesh);
+        console.log('✅ Jury model loaded from Blender successfully');
+      },
+      undefined,
+      (error) => {
+        console.warn('⚠️ Jury.glb not found, falling back to procedural jury seating');
+        // Fallback to procedural jury if model not found
+        const jury = new Jury();
+        this.scene.add(jury.mesh);
+      }
+    );
   }
 
   private createBackground() {
