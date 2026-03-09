@@ -31,7 +31,7 @@ export class World {
     this.scene = new THREE.Scene();
     
     this.createBackground();
-    this.scene.fog = new THREE.Fog(0x0a0a0a, 15, 60);
+    this.scene.fog = null;
 
     const w = container.clientWidth;
     const h = container.clientHeight;
@@ -65,7 +65,7 @@ export class World {
     
     this.addStageSpotlights();
 
-    this.setupGUI();
+    // this.setupGUI();
     this.animate();
     
     window.addEventListener('resize', () => {
@@ -178,18 +178,25 @@ export class World {
       { pos: [8, 8, -10], color: 0xff00ff },
     ];
 
-    [...frontLights, ...sideLights, ...backLights].forEach(light => {
+    [...frontLights, ...sideLights, ...backLights].forEach((light, index) => {
       const spot = new THREE.SpotLight(light.color, 80, 50, Math.PI / 6, 0.5, 1);
       spot.position.set(light.pos[0], light.pos[1], light.pos[2]);
       spot.target.position.set(0, 2, 0);
-      spot.castShadow = true;
-      spot.shadow.mapSize.width = 2048; spot.shadow.mapSize.height = 2048;
-      this.scene.add(spot); this.scene.add(spot.target);
+      
+      // Only front lights cast shadows to reduce texture unit usage
+      if (index < 2) {
+        spot.castShadow = true;
+        spot.shadow.mapSize.width = 1024; 
+        spot.shadow.mapSize.height = 1024;
+      }
+      
+      this.scene.add(spot); 
+      this.scene.add(spot.target);
     });
 
     const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
     rimLight.position.set(0, 15, -20);
-    rimLight.castShadow = true;
+    rimLight.castShadow = false;
     this.scene.add(rimLight);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);

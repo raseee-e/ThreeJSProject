@@ -12,10 +12,11 @@ export class Stage {
     this.buildBackdrop();
     this.buildPillars();
     this.buildLEDPanels();
+    this.buildRoof();
+    this.closeRoomWalls();
   }
 
   private buildFloor() {
-    // Main stage floor with dark material
     const floorMat = new THREE.MeshStandardMaterial({
         color: 0x0a0a0a,
         roughness: 0.7,
@@ -29,35 +30,30 @@ export class Stage {
   }
 
   private buildPodium() {
-    // Main central podium - elevated stage
     const podiumMat = new THREE.MeshStandardMaterial({ 
       color: 0x1a1a1a, 
       roughness: 0.5,
       metalness: 0.4
     });
     
-    // Base tier
     const basePodium = new THREE.Mesh(new THREE.BoxGeometry(20, 0.8, 14), podiumMat);
     basePodium.position.y = 0.4;
     basePodium.castShadow = true;
     basePodium.receiveShadow = true;
     this.mesh.add(basePodium);
 
-    // Second tier
     const secondTier = new THREE.Mesh(new THREE.BoxGeometry(18, 0.8, 12), podiumMat);
     secondTier.position.y = 1.3;
     secondTier.castShadow = true;
     secondTier.receiveShadow = true;
     this.mesh.add(secondTier);
 
-    // Third tier (front stage)
     const thirdTier = new THREE.Mesh(new THREE.BoxGeometry(16, 0.6, 10), podiumMat);
     thirdTier.position.y = 2;
     thirdTier.castShadow = true;
     thirdTier.receiveShadow = true;
     this.mesh.add(thirdTier);
 
-    // Golden edge accent
     const edgeMat = new THREE.MeshStandardMaterial({
       color: 0xffd700,
       metalness: 1,
@@ -76,7 +72,6 @@ export class Stage {
   }
 
   private buildBackdrop() {
-    // Flat backdrop wall instead of curved - fixes rendering bug
     const backdropMat = new THREE.MeshStandardMaterial({
       color: 0x1a2a3a,
       roughness: 0.7,
@@ -85,7 +80,6 @@ export class Stage {
       emissiveIntensity: 0.15
     });
 
-    // Main backdrop panel
     const backdropGeo = new THREE.PlaneGeometry(60, 16);
     const backdrop = new THREE.Mesh(backdropGeo, backdropMat);
     backdrop.position.set(0, 8, -10);
@@ -93,10 +87,8 @@ export class Stage {
     backdrop.receiveShadow = true;
     this.mesh.add(backdrop);
 
-    // Add frame/border for dramatic effect
     this.addBackdropFrame();
 
-    // Add the logo area (Romania Muscle Fest circular area)
     this.addLogoArea();
   }
 
@@ -107,29 +99,24 @@ export class Stage {
       roughness: 0.3
     });
 
-    // Top frame
     const topFrame = new THREE.Mesh(new THREE.BoxGeometry(62, 1, 0.5), frameMat);
     topFrame.position.set(0, 14.5, -10);
     this.mesh.add(topFrame);
 
-    // Bottom frame
     const bottomFrame = new THREE.Mesh(new THREE.BoxGeometry(62, 1, 0.5), frameMat);
     bottomFrame.position.set(0, 1.5, -10);
     this.mesh.add(bottomFrame);
 
-    // Left frame
     const leftFrame = new THREE.Mesh(new THREE.BoxGeometry(1, 16, 0.5), frameMat);
     leftFrame.position.set(-30, 8, -10);
     this.mesh.add(leftFrame);
 
-    // Right frame
     const rightFrame = new THREE.Mesh(new THREE.BoxGeometry(1, 16, 0.5), frameMat);
     rightFrame.position.set(30, 8, -10);
     this.mesh.add(rightFrame);
   }
 
   private addLogoArea() {
-    // Central glowing circle for logo area (Romania Muscle Fest)
     const logoRadius = 5.5;
     
     // Background circle (dark)
@@ -181,11 +168,11 @@ export class Stage {
         logoMesh.scale.set(0.95, 0.95, 1);
         this.mesh.add(logoMesh);
         
-        console.log('✅ Romania Muscle Fest logo loaded successfully');
+        console.log('Romania Muscle Fest logo loaded successfully');
       },
       undefined,
       (error) => {
-        console.warn('⚠️ Logo not found at textures/images.jpg. Using placeholder instead.', error);
+        console.warn('Logo not found at textures/images.jpg. Using placeholder instead.', error);
         // Use placeholder if logo not found
         const placeholderMat = new THREE.MeshBasicMaterial({
           color: 0xffdd00
@@ -252,15 +239,12 @@ export class Stage {
   }
 
   private buildLEDPanels() {
-    // LED floor panels - dotted pattern
     this.createLEDFloor();
     
-    // LED side panels
     this.createLEDSidePanels();
   }
 
   private createLEDFloor() {
-    // Create dotted LED floor pattern
     const dotSpacing = 1.5;
     const dotSize = 0.2;
     const colors = [0xff0080, 0x0080ff, 0x00ff80, 0xffff00];
@@ -269,7 +253,6 @@ export class Stage {
     
     for (let x = -floorArea / 2; x < floorArea / 2; x += dotSpacing) {
       for (let z = -floorArea / 2; z < floorArea / 2; z += dotSpacing) {
-        // Skip some dots for pattern
         if (Math.random() > 0.35) continue;
         
         const dotGeo = new THREE.SphereGeometry(dotSize, 8, 8);
@@ -282,7 +265,6 @@ export class Stage {
         dot.position.set(x, 0.05, z);
         this.mesh.add(dot);
 
-        // Add point lights for glow effect (sparse)
         if (Math.random() > 0.92) {
           const pointLight = new THREE.PointLight(color, 8, 6);
           pointLight.position.set(x, 0.5, z);
@@ -293,28 +275,24 @@ export class Stage {
   }
 
   private createLEDSidePanels() {
-    // Left and right LED panel walls
     const panelMat = new THREE.MeshStandardMaterial({
       color: 0x1a1a1a,
       roughness: 0.8,
       metalness: 0.2
     });
 
-    // Left panel
     const leftPanel = new THREE.Mesh(new THREE.BoxGeometry(2, 12, 60), panelMat);
     leftPanel.position.set(-35, 6, 0);
     leftPanel.castShadow = true;
     leftPanel.receiveShadow = true;
     this.mesh.add(leftPanel);
 
-    // Right panel
     const rightPanel = new THREE.Mesh(new THREE.BoxGeometry(2, 12, 60), panelMat);
     rightPanel.position.set(35, 6, 0);
     rightPanel.castShadow = true;
     rightPanel.receiveShadow = true;
     this.mesh.add(rightPanel);
 
-    // Add LED dots to side panels
     const sideDotSpacing = 1.2;
     for (let y = 1; y < 12; y += sideDotSpacing) {
       for (let z = -25; z < 25; z += sideDotSpacing) {
@@ -333,5 +311,206 @@ export class Stage {
         this.mesh.add(dotRight);
       }
     }
+  }
+
+  private buildRoof() {
+    // Main roof structure - large canopy above the stage
+    const roofMat = new THREE.MeshStandardMaterial({
+      color: 0x2a2a2a,
+      metalness: 0.5,
+      roughness: 0.3,
+      emissive: 0x1a1a1a,
+      emissiveIntensity: 0.2
+    });
+
+    // Main roof panel (large overhead structure)
+    const roofPanel = new THREE.Mesh(new THREE.BoxGeometry(96, 2, 78), roofMat);
+    roofPanel.position.set(0, 19, 0);
+    roofPanel.castShadow = true;
+    roofPanel.receiveShadow = true;
+    this.mesh.add(roofPanel);
+
+    // Roof support beams
+    const beamMat = new THREE.MeshStandardMaterial({
+      color: 0x1a1a1a,
+      metalness: 0.7,
+      roughness: 0.2
+    });
+
+    const beamPositions = [
+      [-35, 16, -25],
+      [-35, 16, 0],
+      [-35, 16, 25],
+      [35, 16, -25],
+      [35, 16, 0],
+      [35, 16, 25],
+      [0, 16, -30],
+      [0, 16, 30]
+    ];
+
+    beamPositions.forEach((pos) => {
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(2, 4, 2), beamMat);
+      beam.position.set(pos[0], pos[1], pos[2]);
+      beam.castShadow = true;
+      beam.receiveShadow = true;
+      this.mesh.add(beam);
+    });
+
+    // Roof frame edges
+    const edgeMat = new THREE.MeshStandardMaterial({
+      color: 0x00d4ff,
+      metalness: 0.9,
+      roughness: 0.1,
+      emissive: 0x0099ff,
+      emissiveIntensity: 0.3
+    });
+
+    const frontEdge = new THREE.Mesh(new THREE.BoxGeometry(90, 0.3, 1), edgeMat);
+    frontEdge.position.set(0, 18.8, 34.5);
+    this.mesh.add(frontEdge);
+
+    const backEdge = new THREE.Mesh(new THREE.BoxGeometry(90, 0.3, 1), edgeMat);
+    backEdge.position.set(0, 18.8, -34.5);
+    this.mesh.add(backEdge);
+
+    const leftEdge = new THREE.Mesh(new THREE.BoxGeometry(1, 0.3, 70), edgeMat);
+    leftEdge.position.set(-44.5, 18.8, 0);
+    this.mesh.add(leftEdge);
+
+    const rightEdge = new THREE.Mesh(new THREE.BoxGeometry(1, 0.3, 70), edgeMat);
+    rightEdge.position.set(44.5, 18.8, 0);
+    this.mesh.add(rightEdge);
+
+    // Add spotlights positioned on the roof
+    this.addRoofSpotlights();
+  }
+
+  private addRoofSpotlights() {
+    // All spotlights are now white
+    const allSpotlightPositions = [
+      // Center spotlights (bright, illuminate the podium)
+      { pos: [-8, 17.5, 5], intensity: 120 },
+      { pos: [8, 17.5, 5], intensity: 120 },
+      // Side spotlights
+      { pos: [-25, 17.5, -5], intensity: 80 },
+      { pos: [-25, 17.5, 15], intensity: 80 },
+      { pos: [25, 17.5, -5], intensity: 80 },
+      { pos: [25, 17.5, 15], intensity: 80 },
+      // Back spotlights
+      { pos: [0, 17.5, 8], intensity: 60 },
+      { pos: [-15, 17.5, 2], intensity: 60 },
+      { pos: [15, 17.5, 2], intensity: 60 },
+    ];
+
+    allSpotlightPositions.forEach((light, index) => {
+      const spotlight = new THREE.SpotLight(0xffffff, light.intensity, 60, Math.PI / 5, 0.4, 1);
+      spotlight.position.set(light.pos[0], light.pos[1], light.pos[2]);
+      
+      // Point spotlights toward the stage center
+      spotlight.target.position.set(
+        light.pos[0] * 0.3,
+        2,
+        light.pos[2] * 0.3
+      );
+      
+      // Only enable shadows for center lights to avoid texture unit overflow
+      if (index < 2) {
+        spotlight.castShadow = true;
+        spotlight.shadow.mapSize.width = 1024;
+        spotlight.shadow.mapSize.height = 1024;
+      }
+      
+      this.mesh.add(spotlight);
+      this.mesh.add(spotlight.target);
+
+      // Create visible white glowing spot
+      this.createSpotlightFixture(light.pos);
+    });
+
+    // Add some accent point lights on the roof edges for atmosphere (no shadows to preserve texture units)
+    const accentPositions = [
+      [-40, 18.5, -30],
+      [-40, 18.5, 30],
+      [40, 18.5, -30],
+      [40, 18.5, 30],
+    ];
+
+    accentPositions.forEach((pos) => {
+      const accentLight = new THREE.PointLight(0x00d4ff, 40, 30);
+      accentLight.position.set(pos[0], pos[1], pos[2]);
+      accentLight.castShadow = false;
+      this.mesh.add(accentLight);
+    });
+  }
+
+  private createSpotlightFixture(position: number[]) {
+    // Create a simple white glowing spot
+    const spotMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      metalness: 0.8,
+      roughness: 0.1,
+      emissive: 0xffffff,
+      emissiveIntensity: 0.8
+    });
+
+    // Simple sphere for the spotlight
+    const spotGeo = new THREE.SphereGeometry(0.4, 16, 16);
+    const spot = new THREE.Mesh(spotGeo, spotMat);
+    spot.position.set(position[0], position[1], position[2]);
+    this.mesh.add(spot);
+
+    // Add a point light to enhance the glow effect
+    const pointLight = new THREE.PointLight(0xffffff, 50, 40);
+    pointLight.position.set(position[0], position[1], position[2]);
+    this.mesh.add(pointLight);
+  }
+
+  private closeRoomWalls() {
+    // Create solid walls to close the room on left and right sides
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0x1a1a1a,
+      metalness: 0.3,
+      roughness: 0.6,
+      emissive: 0x0a0a0a,
+      emissiveIntensity: 0.1
+    });
+
+    // Left wall - closes the left side completely
+    const leftWall = new THREE.Mesh(new THREE.BoxGeometry(2, 20, 75), wallMat);
+    leftWall.position.set(-46, 10, 0);
+    leftWall.castShadow = true;
+    leftWall.receiveShadow = true;
+    this.mesh.add(leftWall);
+
+    // Right wall - closes the right side completely
+    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(2, 20, 75), wallMat);
+    rightWall.position.set(46, 10, 0);
+    rightWall.castShadow = true;
+    rightWall.receiveShadow = true;
+    this.mesh.add(rightWall);
+
+    // Front wall - closes the front
+    const frontWall = new THREE.Mesh(new THREE.BoxGeometry(94, 20, 2), wallMat);
+    frontWall.position.set(0, 10, 36);
+    frontWall.castShadow = true;
+    frontWall.receiveShadow = true;
+    this.mesh.add(frontWall);
+
+    // Add accent lighting to walls
+    const wallAccentPositions = [
+      [-45, 12, -20], [-45, 12, 20],  // Left wall accents
+      [45, 12, -20], [45, 12, 20],    // Right wall accents
+      [-20, 12, 35], [20, 12, 35],    // Front wall accents
+    ];
+
+    wallAccentPositions.forEach((pos, idx) => {
+      const accentLight = new THREE.PointLight(
+        idx < 4 ? 0xff00ff : 0x00ffff,
+        35,
+        20
+      );
+      accentLight.position.set(pos[0], pos[1], pos[2]);
+      this.mesh.add(accentLight);
+    });
   }
 }
