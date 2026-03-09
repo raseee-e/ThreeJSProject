@@ -38,7 +38,7 @@ export class World {
     this.camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 100);
     this.camera.position.set(0, 6, 15);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, precision: 'mediump' });
     this.renderer.setSize(w, h);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -165,41 +165,27 @@ export class World {
   }
 
   private addStageSpotlights() {
+    // Reduced from 6 spotlights to 2 (already handled by Lighting class)
     const frontLights = [
       { pos: [-10, 12, 8], color: 0xff8800 },
       { pos: [10, 12, 8], color: 0xff8800 },
     ];
-    const sideLights = [
-      { pos: [-15, 10, 0], color: 0x00ccff },
-      { pos: [15, 10, 0], color: 0x00ccff },
-    ];
-    const backLights = [
-      { pos: [-8, 8, -10], color: 0xff00ff },
-      { pos: [8, 8, -10], color: 0xff00ff },
-    ];
 
-    [...frontLights, ...sideLights, ...backLights].forEach((light, index) => {
-      const spot = new THREE.SpotLight(light.color, 80, 50, Math.PI / 6, 0.5, 1);
+    frontLights.forEach((light, index) => {
+      const spot = new THREE.SpotLight(light.color, 50, 40, Math.PI / 8, 0.5, 1);
       spot.position.set(light.pos[0], light.pos[1], light.pos[2]);
       spot.target.position.set(0, 2, 0);
-      
-      // Only front lights cast shadows to reduce texture unit usage
-      if (index < 2) {
-        spot.castShadow = true;
-        spot.shadow.mapSize.width = 1024; 
-        spot.shadow.mapSize.height = 1024;
-      }
-      
+      spot.castShadow = false; // No shadows on these to save performance
       this.scene.add(spot); 
       this.scene.add(spot.target);
     });
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.15);
     rimLight.position.set(0, 15, -20);
     rimLight.castShadow = false;
     this.scene.add(rimLight);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
     this.scene.add(ambientLight);
   }
 

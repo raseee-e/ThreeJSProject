@@ -119,8 +119,8 @@ export class Stage {
   private addLogoArea() {
     const logoRadius = 5.5;
     
-    // Background circle (dark)
-    const circleGeo = new THREE.CircleGeometry(logoRadius, 64);
+    // Background circle (dark) - reduced from 64 to 32 segments
+    const circleGeo = new THREE.CircleGeometry(logoRadius, 32);
     const circleMat = new THREE.MeshStandardMaterial({
       color: 0x0a1520,
       metalness: 0.3,
@@ -134,8 +134,8 @@ export class Stage {
     logoBackground.rotation.x = 0;
     this.mesh.add(logoBackground);
 
-    // Glowing ring around logo
-    const ringGeo = new THREE.TorusGeometry(logoRadius, 0.5, 32, 100);
+    // Glowing ring around logo - reduced from (32, 100) to (8, 40)
+    const ringGeo = new THREE.TorusGeometry(logoRadius, 0.5, 8, 40);
     const ringMat = new THREE.MeshStandardMaterial({
       color: 0x00d4ff,
       metalness: 0.9,
@@ -184,8 +184,8 @@ export class Stage {
       }
     );
 
-    // Inner glow
-    const innerGlowGeo = new THREE.CircleGeometry(logoRadius - 0.7, 64);
+    // Inner glow - reduced from 64 to 32 segments
+    const innerGlowGeo = new THREE.CircleGeometry(logoRadius - 0.7, 32);
     const innerGlowMat = new THREE.MeshBasicMaterial({
       color: 0x0066ff,
       transparent: true,
@@ -196,10 +196,8 @@ export class Stage {
     innerGlow.position.set(0, 8, -9.6);
     this.mesh.add(innerGlow);
 
-    // Point light for logo glow
-    const logoLight = new THREE.PointLight(0x0099ff, 80, 25);
-    logoLight.position.set(0, 8, -3);
-    this.mesh.add(logoLight);
+    // Point light for logo glow - removed, using ambient + emissive instead
+    // Too many point lights kill performance
   }
 
   private buildPillars() {
