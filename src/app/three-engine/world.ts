@@ -18,7 +18,6 @@ export class World {
   private flexAnimationMixer: THREE.AnimationMixer | null = null;
   private lighting: Lighting | null = null;
 
-  // Hier speichern wir die Bühnenlichter, damit das Menü sie ansteuern kann
   private mainStageLights: THREE.SpotLight[] = [];
 
   private params = {
@@ -30,7 +29,7 @@ export class World {
   };
 
   constructor(container: HTMLElement) {
-    // 1. Init Scene
+    // Initialize scene
     this.scene = new THREE.Scene();
     this.createBackground();
     this.scene.fog = null;
@@ -52,23 +51,23 @@ export class World {
     this.controls.dampingFactor = 0.05;
     this.controls.autoRotate = false;
 
-    // 2. Build Scene
+    // Build scene
     const stage = new Stage();
     this.scene.add(stage.mesh);
 
-    // 3. TROPHY LADEN aus GLB
+    // Load trophy model
     this.loadTrophyModel();
 
-    // 3.5. FLEX PERSON LADEN
+    // Load flex person model
     this.loadFlexModel();
 
-    // 4. JURY LADEN
+    // Load jury models
     this.loadJuryModel();
 
-    // 5. Lighting und Spots
+    // Setup lighting
     this.addStageSpotlights();
 
-    // GUI und Start
+    // Setup GUI and animation loop
     this.setupGUI();
     this.animate();
 
@@ -125,8 +124,7 @@ export class World {
       (gltf) => {
         this.flex = gltf.scene as THREE.Group;
 
-        // Auf der Bühne in der Mitte positionieren und vergrößern
-        // HIER ANGEPASST: Y von 2.0 auf 2.45 erhöht, damit er auf dem Podest steht
+        // Position on stage in the middle, scaled up
         this.flex.position.set(0, 2.3, 0);
         this.flex.scale.set(2, 2, 2);
 
@@ -193,12 +191,12 @@ export class World {
           });
 
           this.scene.add(juryMesh);
-          console.log(`✅ ${pos.label} loaded at position (${pos.x}, 1.7, 20)`);
+          console.log(`${pos.label} loaded at position (${pos.x}, 1.7, 20)`);
         });
       },
       (xhr) => {},
       (error) => {
-        console.error('❌ FEHLER: Konnte jury.glb nicht laden!', error);
+        console.error('Error: Could not load jury.glb', error);
       }
     );
   }
@@ -261,7 +259,7 @@ export class World {
       this.scene.add(spot);
       this.scene.add(spot.target);
       
-      // Licht im Array speichern, damit das Menü darauf zugreifen kann
+      // Licht im Array speichern zur GUI-Kontrolle
       this.mainStageLights.push(spot);
     });
 
@@ -276,17 +274,15 @@ export class World {
 
   private setupGUI() {
     const gui = new dat.GUI();
-    const folder = gui.addFolder('🇷🇴 Romania Muscle Fest');
+    const folder = gui.addFolder('Romania Muscle Fest');
 
     folder.add(this.params, 'rotationSpeed', 0, 0.1).name('Trophy Rotation');
     
-    // Intensität ändert jetzt Trophäen-Licht UND Bühnen-Licht
     folder.add(this.params, 'spotIntensity', 0, 150).name('Main Light Intensity').onChange((v) => {
       if (this.lighting) this.lighting.spotLight.intensity = v;
       this.mainStageLights.forEach(light => light.intensity = v);
     });
     
-    // Farbe ändert jetzt Trophäen-Licht UND Bühnen-Licht
     folder.addColor(this.params, 'spotColor').name('Main Light Color').onChange((v) => {
       if (this.lighting) this.lighting.spotLight.color.set(v);
       this.mainStageLights.forEach(light => light.color.set(v));
@@ -300,20 +296,16 @@ export class World {
   }
 
   private animate = () => {
-    // Delta-Time für den AnimationMixer (wichtig für flüssige Bewegungen)
     const deltaTime = this.clock.getDelta();
-    // Totale Zeit für die schwebende Trophäe
     const time = this.clock.getElapsedTime();
 
-    // Flex Animation Frame für Frame updaten
+    // Update flex animations
     if (this.flexAnimationMixer) {
       this.flexAnimationMixer.update(deltaTime);
     }
 
     if (this.trophy) {
-      // Trophy drehen
       this.trophy.rotation.y += this.params.rotationSpeed;
-      // Trophy schweben lassen
       this.trophy.position.y = 2.5 + Math.sin(time * 2) * 0.05;
     }
 

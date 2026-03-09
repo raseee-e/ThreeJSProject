@@ -16,7 +16,6 @@
             "outputPath": "dist/bodybuilding-stage",
             "index": "index.html",
             "main": "src/main.ts",
-            "pollings": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "favicon.ico",

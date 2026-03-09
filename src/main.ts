@@ -2,10 +2,12 @@
  * Main Entry Point - Angular Bootstrap
  */
 
+// Angular requires Zone.js
+import 'zone.js';
+
 // Import compiler for JIT compilation
 import '@angular/compiler';
 
-import './polyfills.ts';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
